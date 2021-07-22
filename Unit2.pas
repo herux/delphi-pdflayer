@@ -32,10 +32,21 @@ implementation
 {$R *.fmx}
 
 procedure TForm2.Button1Click(Sender: TObject);
+var
+  lPdfDownload: TDownloadURL;
+  lstream: TMemoryStream;
 begin
-  if RESTClient1. then
-
-  gtDocumentViewer1.LoadFromFile('pdflayer.pdf');
+  lPdfDownload := TDownloadURL.Create;
+  lstream := TMemoryStream.Create;
+  try
+    lPdfDownload.DownloadRawBytes(
+      'http://api.pdflayer.com/api/convert?access_key=48fb4736ebb10deff2dc59583444d5ff&document_url=https://pdflayer.com/documentation',
+      lstream
+      );
+    gtDocumentViewer1.LoadFromStream(lstream);
+  finally
+    lPdfDownload.Free;
+  end;
 end;
 
 end.
